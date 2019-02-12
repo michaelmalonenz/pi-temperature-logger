@@ -27,7 +27,8 @@ def button_press():
   else:
     colour = (0, 0, 1) # blue
   led.color = colour
-  button.wait_for_release()
+
+def release():
   led.off()
 
 
@@ -39,6 +40,7 @@ repo = TemperatureRepository(**dbconfig)
 temp_reader = BME280()
 lux_reader = TSL2561()
 button.when_pressed = button_press
+button.when_released = release
 
 try:
   while True:
