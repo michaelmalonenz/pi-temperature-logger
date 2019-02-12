@@ -1,7 +1,13 @@
-CREATE TABLE IF NOT EXISTS temperature (
+CREATE TABLE temperature (
     temperature float8 NOT NULL,
     pressure float8 NOT NULL,
     humidity float8 NOT NULL,
+    "timestamp" timestamp with time zone NOT NULL
+);
+
+CREATE TABLE lux (
+    infrared float8 NOT NULL,
+    visible float8 NOT NULL,
     "timestamp" timestamp with time zone NOT NULL
 );
 
@@ -22,3 +28,4 @@ END
 $$;
 
 GRANT INSERT ON TABLE temperature TO temperature;
+GRANT INSERT ON TABLE lux TO temperature;

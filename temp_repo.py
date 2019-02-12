@@ -13,3 +13,14 @@ class TemperatureRepository(DatabaseAccessor):
       'humidity': temp.humidity,
     }
     self.execute(sql, params)
+
+  def insert_lux(self, lux):
+    sql = """
+    INSERT INTO lux (infrared, visible, timestamp)
+    VALUES (%(infrared)s,%(visible)s,NOW());
+    """
+    params = {
+      'infrared': lux.infrared,
+      'visible': lux.visible
+    }
+    self.execute(sql, params)
