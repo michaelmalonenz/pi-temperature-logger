@@ -1,12 +1,13 @@
 import time
 import json
 
-from gpiozero import Button, RGBLED
+from gpiozero import Button, RGBLED, Device
 from BME280 import BME280
 from TSL2561 import TSL2561
 from temp_repo import TemperatureRepository
 
-led = RGBLED(20, 21, 22)
+led = RGBLED(red=20, green=21, blue=22)
+button = Button(4)
 
 def button_press():
   temp = temp_reader.read()
@@ -26,7 +27,7 @@ def button_press():
   else:
     colour = (0, 0, 1) # blue
   led.color = colour
-  time.sleep(1)
+  button.wait_for_release()
   led.off()
 
 
@@ -37,12 +38,15 @@ repo = TemperatureRepository(**dbconfig)
 
 temp_reader = BME280()
 lux_reader = TSL2561()
-button = Button(4)
 button.when_pressed = button_press
 
-while True:
-  temp = temp_reader.read()
-  repo.insert_temp(temp)
-  lux = lux_reader.read()
-  repo.insert_lux(lux)
-  button.wait_for_press(300)
+try:
+  while True:
+    temp = temp_reader.read()
+    repo.insert_temp(temp)
+    lux = lux_reader.read()
+    repo.insert_lux(lux)
+    button.wait_for_press(300)
+except KeyboardInterrupt:
+  button.close()
+  led.close()
