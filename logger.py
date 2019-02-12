@@ -6,7 +6,7 @@ from BME280 import BME280
 from TSL2561 import TSL2561
 from temp_repo import TemperatureRepository
 
-led = RGBLED(red=20, green=21, blue=22)
+led = RGBLED(red=22, green=20, blue=21)
 button = Button(4)
 
 def button_press():
