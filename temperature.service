@@ -1,0 +1,14 @@
+[Unit]
+Description=A simple temperature logger for the Raspberry PI with Floral Bonnet
+Documentation=https://github.com/michaelmalonenz/pi-temperature-logger
+After=multi-user.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/pi-temperature-logger
+ExecStart=/home/pi/.venv/pytemp/bin/python logger.py
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
