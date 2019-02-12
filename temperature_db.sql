@@ -1,4 +1,4 @@
-CREATE TABLE temperature (
+CREATE TABLE temperatures (
     temperature float8 NOT NULL,
     pressure float8 NOT NULL,
     humidity float8 NOT NULL,
@@ -27,5 +27,5 @@ BEGIN
 END
 $$;
 
-GRANT INSERT ON TABLE temperature TO temperature;
+GRANT INSERT ON TABLE temperatures TO temperature;
 GRANT INSERT ON TABLE lux TO temperature;
