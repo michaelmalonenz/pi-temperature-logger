@@ -4,7 +4,7 @@ class TemperatureRepository(DatabaseAccessor):
 
   def insert_temp(self, temp):
     sql = """
-    INSERT INTO temperatures (temperature, pressure, humidity, time)
+    INSERT INTO temperatures (temperature, pressure, humidity, timestamp)
     VALUES (%(temperature)s,%(pressure)s,%(humidity)s, NOW());
     """
     params = {

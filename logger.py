@@ -14,4 +14,4 @@ temp_reader = BME280()
 while True:
   temp = temp_reader.read()
   repo.insert_temp(temp)
-  time.sleep(2)
+  time.sleep(300)
