@@ -4,7 +4,10 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-cffi==1.11.5              # via smbus-cffi
+cffi==1.12.0              # via smbus-cffi
+colorzero==1.1            # via gpiozero
+gpiozero==1.5.0
 psycopg2-binary==2.7.7
 pycparser==2.19           # via cffi
+rpi.gpio==0.6.5
 smbus-cffi==0.5.1

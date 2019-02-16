@@ -1,4 +1,4 @@
 psycopg2-binary
 smbus-cffi
 gpiozero
-GPIO
+RPi.GPIO
