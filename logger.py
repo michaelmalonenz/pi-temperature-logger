@@ -4,7 +4,26 @@ import json
 from gpiozero import Button, RGBLED, Device
 from BME280 import BME280
 from TSL2561 import TSL2561
+from ssd1306 import SSD1306
 from temp_repo import TemperatureRepository
+
+lcd = SSD1306(spi_bus=0, spi_device=0, pin_dc=23, pin_reset=24)
+lcd.hardware(remap_segment=True, alternative_com_pin=True, remap_scan_direction=True)
+
+lcd.contrast(40)
+lcd.paint()
+lcd.on()
+
+# Light all the corners
+lcd.xy(0, 0, 1)
+lcd.xy(0, 63, 1)
+lcd.xy(127, 0, 1)
+lcd.xy(127, 63, 1)
+lcd.paint()
+
+# Write some text
+lcd.text(28, 28, "Hello world!", size=1)
+lcd.paint()
 
 led = RGBLED(red=22, green=20, blue=21)
 button = Button(4)
@@ -52,3 +71,4 @@ try:
 except KeyboardInterrupt:
   button.close()
   led.close()
+  lcd.reset()
