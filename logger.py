@@ -46,6 +46,8 @@ def button_press():
   else:
     colour = (0, 0, 1) # blue
   led.color = colour
+  lcd.text(28, 28, "{}°C".format(temp), size=1)
+  lcd.paint()
 
 def release():
   led.off()
