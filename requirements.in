@@ -3,3 +3,6 @@ smbus-cffi
 gpiozero
 RPi.GPIO
 spidev
+luma-led-matrix
+luma-emulator
+luma-oled
