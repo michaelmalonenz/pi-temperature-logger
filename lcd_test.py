@@ -1,7 +1,7 @@
 import luma.oled.device
 from luma.core.sprite_system import framerate_regulator
+from luma.core import cmdline
 import sys
-
 
 class make_serial(object):
     """
@@ -14,15 +14,15 @@ class make_serial(object):
 
     def i2c(self):
         from luma.core.interface.serial import i2c
-        return i2c(port=self.opts.i2c_port, address=self.opts.i2c_address)
+        return i2c(port=self.opts['i2c_port'], address=self.opts['i2c_address'])
 
     def spi(self):
         from luma.core.interface.serial import spi
-        if hasattr(self.opts, 'gpio') and self.opts.gpio is not None:
-            GPIO = importlib.import_module(self.opts.gpio)
+        if hasattr(self.opts, 'gpio') and self.opts['gpio'] is not None:
+            GPIO = importlib.import_module(self.opts['gpio'])
 
-            if hasattr(self.opts, 'gpio_mode') and self.opts.gpio_mode is not None:
-                (packageName, _, attrName) = self.opts.gpio_mode.rpartition('.')
+            if hasattr(self.opts, 'gpio_mode') and self.opts['gpio_mode'] is not None:
+                (packageName, _, attrName) = self.opts['gpio_mode'].rpartition('.')
                 pkg = importlib.import_module(packageName)
                 mode = getattr(pkg, attrName)
                 GPIO.setmode(mode)
@@ -33,35 +33,42 @@ class make_serial(object):
         else:
             GPIO = None
 
-        return spi(port=self.opts.spi_port,
-                   device=self.opts.spi_device,
-                   bus_speed_hz=self.opts.spi_bus_speed,
-                   cs_high=self.opts.spi_cs_high,
-                   transfer_size=self.opts.spi_transfer_size,
-                   gpio_DC=self.opts.gpio_data_command,
-                   gpio_RST=self.opts.gpio_reset,
+        return spi(port=self.opts['spi_port'],
+                   device=self.opts['spi_device'],
+                   bus_speed_hz=self.opts['spi_bus_speed'],
+                   cs_high=self.opts['spi_cs_high'],
+                   transfer_size=self.opts['spi_transfer_size'],
+                   gpio_DC=self.opts['gpio_data_command'],
+                   gpio_RST=self.opts['gpio_reset'],
                    gpio=self.gpio or GPIO)
 
     def ftdi_spi(self):
         from luma.core.interface.serial import ftdi_spi
-        return ftdi_spi(device=self.opts.ftdi_device,
-                        bus_speed_hz=self.opts.spi_bus_speed,
-                        gpio_DC=self.opts.gpio_data_command,
-                        gpio_RST=self.opts.gpio_reset)
+        return ftdi_spi(device=self.opts['ftdi_device'],
+                        bus_speed_hz=self.opts['spi_bus_speed'],
+                        gpio_DC=self.opts['gpio_data_command'],
+                        gpio_RST=self.opts['gpio_reset'])
 
     def ftdi_i2c(self):
         from luma.core.interface.serial import ftdi_i2c
-        return ftdi_i2c(address=self.opts.i2c_address)
+        return ftdi_i2c(address=self.opts['i2c_address'])
 
-
-from luma.core import cmdline
 
 parser = cmdline.create_parser(description='lcd test')
 args = parser.parse_args(sys.argv[1:])
 
-Device = getattr(luma.oled.device, args.display)
-Serial = getattr(make_serial(args), args.interface)
-device = Device(serial_interface=Serial(), **vars(args))
+args = {
+  'spi_cs_high': False, 'loop': 0, 'duration': 0.01, 'rotate': 0, 'mode': 'RGB', 'transform': 'scale2x',
+  'gpio_data_command': 23, 'ftdi_device': 'ftdi://::/1', 'i2c_port': 1, 'spi_bus_speed': 8000000,
+  'config': None, 'gpio_mode': None, 'v_offset': 0, 'gpio': None, 'spi_transfer_size': 4096, 'h_offset': 0,
+  'scale': 2, 'gpio_backlight': 18, 'width': 128, 'interface': 'spi', 'bgr': False, 'display': 'ssd1306',
+  'gpio_reset': 24, 'backlight_active': 'low', 'framebuffer': 'diff_to_previous', 'i2c_address': '0x3C',
+  'max_frames': None, 'height': 64, 'block_orientation': 0, 'spi_port': 0, 'spi_device': 0
+}
+
+Device = getattr(luma.oled.device, args['display'])
+Serial = getattr(make_serial(args), args['interface'])
+device = Device(serial_interface=Serial(), **args)
 
 canvas = luma.core.render.canvas(device)
 

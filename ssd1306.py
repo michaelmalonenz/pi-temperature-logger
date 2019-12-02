@@ -36,8 +36,9 @@ ADDRESSING_HORIZONTAL = 0x00
 ADDRESSING_VERTICAL = 0x01
 ADDRESSING_PAGE = 0x02
 
+#python3 examples/pi_logo.py --display ssd1306 --width 128 --height 64 --interface spi --spi-port 0 --spi-device 0 --gpio-reset 24 --gpio-data-command 23
 class SSD1306:
-	def __init__(self, pin_dc, pin_reset, spi_bus=0, spi_device=0, buffer_pages=8, buffer_columns=128):
+	def __init__(self, pin_dc=23, pin_reset=24, spi_bus=0, spi_device=0, buffer_pages=8, buffer_columns=128):
 		self.buffer_pages = buffer_pages
 		self.buffer_columns = buffer_columns
 		self.pin_reset = pin_reset
