@@ -1,14 +1,16 @@
 import time
 import json
+import subprocess
 
 from gpiozero import Button, RGBLED, Device
 from BME280 import BME280
 from TSL2561 import TSL2561
-from ssd1306 import SSD1306
 from temp_repo import TemperatureRepository
+from ssd1306 import SSD1306
 
 lcd = SSD1306(spi_bus=0, spi_device=0, pin_dc=23, pin_reset=24)
-lcd.hardware(remap_segment=True, alternative_com_pin=True, remap_scan_direction=True)
+lcd.hardware(remap_segment=True, remap_scan_direction=True)
+lcd.set_buffer_size(128, 64)
 
 lcd.contrast(40)
 lcd.paint()
@@ -47,6 +49,7 @@ def button_press():
     colour = (0, 0, 1) # blue
   led.color = colour
   lcd.text(28, 28, "{}°C".format(temp), size=1)
+  subprocess.run(['rasspistill', '-dt', '-n', '-t', '1s', '-o', '/tmp/%d.jpeg'])
   lcd.paint()
 
 def release():
