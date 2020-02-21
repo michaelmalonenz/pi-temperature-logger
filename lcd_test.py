@@ -66,18 +66,22 @@ args = {
   'max_frames': None, 'height': 64, 'block_orientation': 0, 'spi_port': 0, 'spi_device': 0
 }
 
+
 Device = getattr(luma.oled.device, args['display'])
 Serial = getattr(make_serial(args), args['interface'])
-device = Device(serial_interface=Serial(), **args)
 
-canvas = luma.core.render.canvas(device)
 
-regulator = framerate_regulator(fps=0)
+class LcdScreen:
 
-num_frames = 40
+    def __init__(self):
+        self.device = Device(serial_interface=Serial(), **args)
 
-while num_frames > 0:
-    with regulator:
-        with canvas as c:
-            c.text((2, 0), "Hello, world!", fill="white")
-    num_frames -= 1
+    def display(self, text, num_frames = 40):
+        canvas = luma.core.render.canvas(self.device)
+        regulator = framerate_regulator(fps=0)
+        while num_frames > 0:
+            with regulator:
+                with canvas as c:
+                    c.text((2, 0), text, fill="white")
+            num_frames -= 1
+
