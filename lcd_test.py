@@ -2,6 +2,8 @@ import luma.oled.device
 from luma.core.sprite_system import framerate_regulator
 from luma.core import cmdline
 import sys
+from PIL.ImageFont import truetype
+
 
 class make_serial(object):
     """
@@ -69,6 +71,7 @@ args = {
 
 Device = getattr(luma.oled.device, args['display'])
 Serial = getattr(make_serial(args), args['interface'])
+ubuntu = truetype('/usr/share/fonts/truetype/piboto/Piboto-Regular.ttf', size=20)
 
 
 class LcdScreen:
@@ -82,6 +85,6 @@ class LcdScreen:
         while num_frames > 0:
             with regulator:
                 with canvas as c:
-                    c.text((2, 0), text, fill="white")
+                    c.text((2, 0), text, fill="white", font=ubuntu)
             num_frames -= 1
 
