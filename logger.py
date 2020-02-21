@@ -34,7 +34,7 @@ def button_press():
   else:
     colour = (0, 0, 1) # blue
   led.color = colour
-  screen.display("{}°C".format(temp.temperature))
+  screen.display("{:.2f}°C".format(temp.temperature))
   subprocess.run(['raspistill', '-dt', '-n', '-t', '1s', '-o', '/tmp/%d.jpeg'], check=True)
 
 def release():
