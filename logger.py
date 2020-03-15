@@ -38,7 +38,8 @@ def button_press():
   led.color = colour
   screen.display("{:.2f}°C".format(temp.temperature))
   subprocess.run(['raspistill', '-n', '-t', '2s', '-o', '/tmp/out.jpeg'], check=True)
-  img = Image.open('/tmp/out.jpeg')
+  subprocess.run(['convert', '/tmp/out.jpeg', '-resize', '160x120', '/tmp/small.jpeg'])
+  img = Image.open('/tmp/small.jpeg')
   screen.display_image(img)
 
 
