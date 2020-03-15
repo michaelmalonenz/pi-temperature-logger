@@ -3,6 +3,8 @@ import json
 import subprocess
 import logger
 
+from PIL import Image
+
 from gpiozero import Button, RGBLED, Device
 from BME280 import BME280
 from TSL2561 import TSL2561
@@ -35,7 +37,10 @@ def button_press():
     colour = (0, 0, 1) # blue
   led.color = colour
   screen.display("{:.2f}°C".format(temp.temperature))
-  subprocess.run(['raspistill', '-dt', '-n', '-t', '1s', '-o', '/tmp/%d.jpeg'], check=True)
+  subprocess.run(['raspistill', '-n', '-t', '2s', '-o', '/tmp/out.jpeg'], check=True)
+  img = Image.open('/tmp/out.jpeg')
+  screen.display_image(img)
+
 
 def release():
   led.off()

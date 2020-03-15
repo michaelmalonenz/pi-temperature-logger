@@ -71,20 +71,28 @@ args = {
 
 Device = getattr(luma.oled.device, args['display'])
 Serial = getattr(make_serial(args), args['interface'])
-ubuntu = truetype('/usr/share/fonts/truetype/piboto/Piboto-Regular.ttf', size=20)
+piboto_font = truetype('/usr/share/fonts/truetype/piboto/Piboto-Regular.ttf', size=20)
 
 
 class LcdScreen:
 
-    def __init__(self):
-        self.device = Device(serial_interface=Serial(), **args)
-
     def display(self, text, num_frames = 40):
-        canvas = luma.core.render.canvas(self.device)
+        device = Device(serial_interface=Serial(), **args)
+        canvas = luma.core.render.canvas(device)
         regulator = framerate_regulator(fps=0)
         while num_frames > 0:
             with regulator:
                 with canvas as c:
-                    c.text((2, 0), text, fill="white", font=ubuntu)
+                    c.text((2, 0), text, fill="white", font=piboto_font)
             num_frames -= 1
 
+    def display_image(self, image):
+        num_frames = 40
+        device = Device(serial_interface=Serial(), **args)
+        canvas = luma.core.render.canvas(device)
+        regulator = framerate_regulator(fps=0)
+        while num_frames > 0:
+            with regulator:
+                with canvas as c:
+                    c.image((0, 0), image)
+            num_frames -= 1
