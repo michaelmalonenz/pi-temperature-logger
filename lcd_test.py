@@ -89,10 +89,10 @@ class LcdScreen:
     def display_image(self, image):
         num_frames = 40
         device = Device(serial_interface=Serial(), **args)
-        canvas = luma.core.render.canvas(device)
+        canvas = luma.core.render.canvas(device, background=image)
         regulator = framerate_regulator(fps=0)
         while num_frames > 0:
             with regulator:
                 with canvas as c:
-                    c.image((0, 0), image)
+                    pass
             num_frames -= 1
