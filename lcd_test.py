@@ -2,6 +2,8 @@ import luma.oled.device
 from luma.core.sprite_system import framerate_regulator
 from luma.core import cmdline
 import sys
+from PIL.ImageFont import truetype
+
 
 class make_serial(object):
     """
@@ -66,18 +68,31 @@ args = {
   'max_frames': None, 'height': 64, 'block_orientation': 0, 'spi_port': 0, 'spi_device': 0
 }
 
+
 Device = getattr(luma.oled.device, args['display'])
 Serial = getattr(make_serial(args), args['interface'])
-device = Device(serial_interface=Serial(), **args)
+piboto_font = truetype('/usr/share/fonts/truetype/piboto/Piboto-Regular.ttf', size=20)
 
-canvas = luma.core.render.canvas(device)
 
-regulator = framerate_regulator(fps=0)
+class LcdScreen:
 
-num_frames = 40
+    def display(self, text, num_frames = 40):
+        device = Device(serial_interface=Serial(), **args)
+        canvas = luma.core.render.canvas(device)
+        regulator = framerate_regulator(fps=0)
+        while num_frames > 0:
+            with regulator:
+                with canvas as c:
+                    c.text((2, 0), text, fill="white", font=piboto_font)
+            num_frames -= 1
 
-while num_frames > 0:
-    with regulator:
-        with canvas as c:
-            c.text((2, 0), "Hello, world!", fill="white")
-    num_frames -= 1
+    def display_image(self, image):
+        num_frames = 40
+        device = Device(serial_interface=Serial(), **args)
+        canvas = luma.core.render.canvas(device, background=image)
+        regulator = framerate_regulator(fps=0)
+        while num_frames > 0:
+            with regulator:
+                with canvas as c:
+                    pass
+            num_frames -= 1
